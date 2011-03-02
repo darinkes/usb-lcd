@@ -1,0 +1,9 @@
+
+#define FONT	0xF8
+#define SYMBOL	0xF9
+#define SETLINE	0xFA
+#define READY	0xFB
+#define INVALID	0xFC
+#define CLEAR	0xFD
+#define STRING  0xFE
+#define DONE	0xFF

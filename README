@@ -1,0 +1,72 @@
+= USB System LCD for small OpenBSD appliances
+
+This is the sourcecode of a little private project to add a systeminfo
+LCD to my OpenBSD home firewall.
+
+It has three Parts:
+
+1. a) Commandline-Interface to controll an AVR via USB
+      This tool is able to send commands to the AVR with an own "designed"
+      protocol.
+   b) Firmware for the AVR
+
+2. Background-Service
+  This tool sends in a constant frequent data to the AVR, which shows
+  them on the LCD.
+
+3. Local small system-monitor
+  This tool shows you information about your system and the choosen
+  network interface. Very useful if you have a very minimal userland
+  installed and so no top, trafshow etc. available.
+
+= included/needed software
+
+The AVR sourcecode uses parts from V-USB (http://www.obdev.at/vusb/)
+which is published under the terms of the GNU General Public License
+Version 2 (GPL). See firmware/USB-License.txt for details.
+
+To compile you need libusb installed.
+
+= Building and Executing
+
+1. Commandline-Interface and Background-Service to controll an AVR via USB
+  a)
+    $ cd commandline/
+    $ make clean && USB=1 make
+    => brings us four executables
+
+  b) The stripped executable is for very small appliances and saves
+     some space.
+
+   - Files: gslcd and gslcd.strip
+     Is the Background-Service for constant updating the LCD
+
+   - Files: usblcd and usblcd.strip
+     Commandline-Tool to control the AVR
+
+2. Local small system-monitor
+
+  $ cd commandline/
+  $ make clean && make gslcd
+
+  Execute it and tell the network-interface via -i
+  $ ./gslcd -i re0
+  uptime: 34 days 23:06,
+  Hostname: bla.foo.goo
+  CPUSpeed: 2009 MHz
+  Load: 0.16, 0.22, 0.18
+  Mem: 42MB/1GB Used
+  Interface: re0
+  R:   26.05GB  D:  132.00B/s
+  T:    3.79GB  U:  402.00B/s
+  IPv4: 192.168.0.14
+  IPv6: fe80:1::213:8fff:fe9a:13ed
+
+
+= Pictures/Circuit Diagram
+
+Coming soon...
+
+= License
+
+See firmware/USB-License.txt and commandline/License.txt for details.
