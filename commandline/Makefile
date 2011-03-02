@@ -38,4 +38,4 @@ gslcd.o:
 	$(CC) $(CFLAGS) -c $*.c -o $*.o
 
 clean:
-	rm -f usblcd gslcd leak_test *.o *.strip
+	rm -f usblcd gslcd *.o *.strip
