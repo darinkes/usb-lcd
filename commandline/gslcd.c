@@ -51,7 +51,8 @@ main(int argc, char **argv) {
 	int		mib[6], cpuspeed, pagesize,
 			ch, memtotal, memused, memfree,
 			iflag = 0,
-			days, hrs, mins;
+			days, hrs, mins,
+			matchcount = 0;
 	static int	pageshift;
 	char		hostname[256],
 			ifname[IFNAMSIZ],
@@ -225,6 +226,7 @@ main(int argc, char **argv) {
 			exit(1);
 		}
 		uptime = newtime.tv_sec - boottime.tv_sec;
+		snprintf(strup, sizeof(strup), "uptime:");
 		if (uptime > 59) {
 			uptime += 30;
 			days = uptime / SECSPERDAY;
@@ -232,7 +234,6 @@ main(int argc, char **argv) {
 			hrs = uptime / SECSPERHOUR;
 			uptime %= SECSPERHOUR;
 			mins = uptime / SECSPERMIN;
-			snprintf(strup, sizeof(strup), "uptime:");
 			if (days > 0)
 				snprintf(strup, sizeof(strup), "%s %d day%s", strup, days, days > 1 ? "s" : "");
 			if (hrs > 0 && mins > 0)
@@ -327,6 +328,7 @@ main(int argc, char **argv) {
 				    ifasp->ifa_name, ifap->ifa_name);
 
 			if ( iflag && strcmp(ifname, ifap->ifa_name) == 0  && timediff > 0) {
+				matchcount++;
 
 				if ( ( (ifap->ifa_flags & IFF_UP) != 0 &&
 				     (ifap->ifa_flags & IFF_LOOPBACK) == 0 ) ) {
@@ -456,6 +458,11 @@ main(int argc, char **argv) {
 			}
 			namep = ifap->ifa_name;
 			ifasp = ifasp->ifa_next;
+		}
+		printf("\n");
+		if (matchcount == 0) {
+			fprintf(stderr, "%s: no such interface\n", ifname);
+			exit(1);
 		}
 #ifdef USB
 		usbSend(handle, DONE);
